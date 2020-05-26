@@ -1,0 +1,15 @@
+<div *ngIf="kitIsLoading">Loading...</div>
+<div *ngIf="kit">
+  <p>Kit {{ kit.name }}</p>
+  <table>
+    <tr><td>Id</td><td>{{ kit.id }}</td></tr>
+    <tr><td>Article</td><td>{{ kit.article }}</td></tr>
+    <tr><td>Type</td><td>{{ kit.type }}</td></tr>
+    <tr><td>Scale</td><td>{{ kit.scale }}</td></tr>
+    <tr><td>Description</td><td>{{ kit.description }}</td></tr>
+    <tr><td>Active</td><td>{{ kit.isActive }}</td></tr>
+  </table>
+</div>
+<p>
+  <button (click)="goBack()">Go back</button>
+</p>

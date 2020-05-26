@@ -1,0 +1,55 @@
+<form [formGroup]="kitForm" (ngSubmit)="onSubmit()">
+  <p>
+    <label>Article: </label>
+    <input type="text" formControlName="article">
+  </p>
+  <div *ngIf="article.invalid && isSubmitted">
+    <div *ngIf="article.errors.required">
+      Article is required.
+    </div>
+  </div>
+
+  <p>
+    <label>Name: </label>
+    <input type="text" formControlName="name">
+  </p>
+  <div *ngIf="name.invalid && isSubmitted">
+    <div *ngIf="name.errors.required">
+      Name is required.
+    </div>
+    <div *ngIf="name.errors.minlength">
+      Name must be at least {{ name.errors.minlength.requiredLength }} characters long.
+    </div>
+  </div>
+
+  <p>
+    Type:
+    <input type="radio" formControlName="type" [value]="kitTypes.PLASTIC">
+    <label>Plastic</label>
+    <input type="radio" formControlName="type" [value]="kitTypes.RESIN">
+    <label>Resin</label>
+  </p>
+
+  <p>
+    <label>Scale: </label>
+    <select formControlName="scale">
+      <option [value]="scaleTypes.SMALL">{{scaleTypes.SMALL}}</option>
+      <option [value]="scaleTypes.MIDDLE">{{scaleTypes.MIDDLE}}</option>
+      <option [value]="scaleTypes.LARGE">{{scaleTypes.LARGE}}</option>
+    </select>
+  </p>
+
+  <p>
+    <label [style]="{display: 'block'}">Description:</label>
+    <textarea formControlName="description"></textarea>
+  </p>
+
+  <p>
+    <input type="checkbox" formControlName="isActive">
+    <label>Kit is active</label>
+  </p>
+
+  <p>
+    <button type="submit">Submit</button>
+  </p>
+</form>

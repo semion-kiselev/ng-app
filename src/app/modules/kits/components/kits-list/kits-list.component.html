@@ -1,0 +1,36 @@
+<p>kits-list works!</p>
+<p>
+  <button routerLink="/kits/create">Create kit</button>
+</p>
+<div *ngIf="kitsAreLoading">Loading...</div>
+<div *ngIf="kits && kits.length === 0">No kits :(</div>
+<table *ngIf="kits && kits.length > 0">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>article</th>
+      <th>type</th>
+      <th>scale</th>
+      <th>name</th>
+      <th>description</th>
+      <th>active</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let kit of kits">
+      <td>{{ kit.id }}</td>
+      <td>{{ kit.article }}</td>
+      <td>{{ kitTypes[kit.type] }}</td>
+      <td>{{ scaleTypes[kit.scale] }}</td>
+      <td>{{ kit.name }}</td>
+      <td>{{ kit.description }}</td>
+      <td>{{ kit.isActive }}</td>
+      <td>
+        <button (click)="viewKit(kit.id)">View</button>
+        <button (click)="updateKit(kit.id)">Update</button>
+        <button (click)="removeKit(kit.id)">Remove</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

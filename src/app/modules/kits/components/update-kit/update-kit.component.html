@@ -1,0 +1,3 @@
+<p>Update kit</p>
+<div *ngIf="kitIsLoading">Loading...</div>
+<app-kit-form *ngIf="kit" (formSubmit)="onSubmit($event)" [kit]="kit"></app-kit-form>
