@@ -1,0 +1,55 @@
+<h2>Register</h2>
+<p>semion.kiselev@gmail.com</p>
+<p>12345678</p>
+
+<div *ngIf="isRegistered && isRegistrationConfirmed" >
+  You are nothing to do here. Go to Login page.
+</div>
+
+<form *ngIf="!isRegistered" [formGroup]="registerForm" (ngSubmit)="onSubmitRegistration()">
+  <p>
+    <label>Username: </label>
+    <input type="text" formControlName="username">
+  </p>
+  <div *ngIf="username.invalid && registerFormIsSubmitted">
+    <div *ngIf="username.errors.required">
+      Username is required.
+    </div>
+    <div *ngIf="username.errors.minlength">
+      Username must be at least {{ username.errors.minlength.requiredLength }} characters long.
+    </div>
+  </div>
+
+  <p>
+    <label>Password: </label>
+    <input type="password" formControlName="password">
+  </p>
+  <div *ngIf="password.invalid && registerFormIsSubmitted">
+    <div *ngIf="password.errors.required">
+      Password is required.
+    </div>
+    <div *ngIf="password.errors.minlength">
+      Password must be at least {{ password.errors.minlength.requiredLength }} characters long.
+    </div>
+  </div>
+
+  <p>
+    <button (click)="onSubmitRegistration()">Register</button>
+  </p>
+</form>
+
+<form *ngIf="isRegistered && !isRegistrationConfirmed" [formGroup]="confirmationForm" (ngSubmit)="onSubmitConfirmation()">
+  <p>
+    <label>Verification code: </label>
+    <input type="text" formControlName="code">
+  </p>
+  <div *ngIf="code.invalid && registerFormIsSubmitted">
+    <div *ngIf="code.errors.required">
+      Verification code is required.
+    </div>
+  </div>
+
+  <p>
+    <button (click)="onSubmitConfirmation()">Confirm Registration</button>
+  </p>
+</form>

@@ -19,8 +19,8 @@ export class KitComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.kitIsLoading = true;
-      const id = Number(params.get('id'));
-      this.kitsService.getKitById(id).subscribe({
+      const article = params.get('article');
+      this.kitsService.getKitById(article).subscribe({
         next: (kit: Kit) => this.kit = kit,
         complete: () => this.kitIsLoading = false,
       });

@@ -1,0 +1,10 @@
+{
+	"auth": {
+		"ngapp0fafcb30": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false
+		}
+	}
+}

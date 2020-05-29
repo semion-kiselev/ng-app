@@ -1,8 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {Observable, of} from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {Observable, of, from} from 'rxjs';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import { Auth } from 'aws-amplify';
 import {Kit} from '../types/kit';
+
+interface ItemsResponseType {
+  Items: object[];
+}
+
+interface ItemResponseType {
+  Item: object;
+}
+
+const attributesFirstLetterTo = (command: 'lower' | 'upper') => <T>(item: object) => {
+  const newItem = {};
+  const caseCommand = command === 'lower' ? 'toLowerCase' : 'toUpperCase';
+  Object.keys(item).forEach((key: string) => {
+    const lowerKey = key.charAt(0)[caseCommand]() + key.slice(1);
+    newItem[lowerKey] = item[key];
+  });
+  return newItem as T;
+};
+
+const attributesFirstLetterToLower = attributesFirstLetterTo('lower');
+const attributesFirstLetterToUpper = attributesFirstLetterTo('upper');
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +32,7 @@ import {Kit} from '../types/kit';
 export class KitsService {
   constructor(private http: HttpClient) { }
 
-  private kitsUrl = 'http://localhost:3000/api.kits';
+  private kitsUrl = 'https://80fo5exz60.execute-api.eu-central-1.amazonaws.com/prod/kits';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -24,36 +46,46 @@ export class KitsService {
   }
 
   getKits(): Observable<Kit[]> {
-    return this.http.get<Kit[]>(this.kitsUrl)
+    return this.http.get<ItemsResponseType>(this.kitsUrl)
       .pipe(
+        map((response: ItemsResponseType): Kit[] =>
+          response.Items.map<Kit>(attributesFirstLetterToLower)
+        ),
         catchError(this.handleError<Kit[]>('getKits', []))
       );
   }
 
-  getKitById(id: number): Observable<Kit> {
-    const url = `${this.kitsUrl}/${id.toString()}`;
-    return this.http.get<Kit>(url).pipe(
-      catchError(this.handleError<Kit>(`getKitById: ${id}`))
+  // with Authorization
+  getKitById(article: string): Observable<any> {
+    const url = `${this.kitsUrl}/${article}`;
+
+    return from(Auth.currentSession()).pipe(
+      switchMap((tokens: any) => this.http.get<ItemResponseType>(url, {
+        headers: {
+          Authorization: tokens.idToken.jwtToken
+        }
+      })),
+      map((response: ItemResponseType): Kit =>
+        attributesFirstLetterToLower<Kit>(response.Item)
+      ),
+      catchError(this.handleError<Kit>(`getKitById: ${article}`))
     );
   }
 
-  addKit(kit: Kit): Observable<Kit> {
-    return this.http.post<Kit>(this.kitsUrl, kit, this.httpOptions).pipe(
+  addKit(kit: Kit): any {
+    return this.http.post<Kit>(this.kitsUrl, attributesFirstLetterToUpper(kit), this.httpOptions).pipe(
       catchError(this.handleError<Kit>('addKit'))
     );
   }
 
   updateKit(kit: Kit): Observable<any> {
-    const url = `${this.kitsUrl}/${kit.id.toString()}`;
-    return this.http.put(url, kit, this.httpOptions).pipe(
-      catchError(this.handleError<any>('updateKit'))
-    );
+    return this.addKit(kit);
   }
 
-  removeKit(id: number): Observable<Kit> {
-    const url = `${this.kitsUrl}/${id.toString()}`;
+  removeKit(article: string): Observable<Kit> {
+    const url = `${this.kitsUrl}/${article}`;
     return this.http.delete<Kit>(url).pipe(
-      catchError(this.handleError<Kit>(`removeById: ${id}`))
+      catchError(this.handleError<Kit>(`removeById: ${article}`))
     );
   }
 }

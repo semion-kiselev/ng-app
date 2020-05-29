@@ -1,6 +1,39 @@
-<h2>LOGIN</h2>
+<h2>Login</h2>
+<p>semion.kiselev@gmail.com</p>
+<p>12345678</p>
 
-<p>
-  <button (click)="login()"  *ngIf="!authService.isLoggedIn">Login</button>
-  <button (click)="logout()" *ngIf="authService.isLoggedIn">Logout</button>
+<form *ngIf="!authService.isLoggedIn" [formGroup]="loginForm" (ngSubmit)="login()">
+  <p>
+    <label>Username: </label>
+    <input type="text" formControlName="username">
+  </p>
+  <div *ngIf="username.invalid && loginFormIsSubmitted">
+    <div *ngIf="username.errors.required">
+      Username is required.
+    </div>
+    <div *ngIf="username.errors.minlength">
+      Username must be at least {{ username.errors.minlength.requiredLength }} characters long.
+    </div>
+  </div>
+
+  <p>
+    <label>Password: </label>
+    <input type="password" formControlName="password">
+  </p>
+  <div *ngIf="password.invalid && loginFormIsSubmitted">
+    <div *ngIf="password.errors.required">
+      Password is required.
+    </div>
+    <div *ngIf="password.errors.minlength">
+      Password must be at least {{ password.errors.minlength.requiredLength }} characters long.
+    </div>
+  </div>
+
+  <p>
+    <button (click)="login()">Login</button>
+  </p>
+</form>
+
+<p *ngIf="authService.isLoggedIn">
+  <button (click)="logout()">Logout</button>
 </p>

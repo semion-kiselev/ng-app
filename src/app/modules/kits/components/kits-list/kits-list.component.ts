@@ -29,15 +29,15 @@ export class KitsListComponent implements OnInit {
     });
   }
 
-  viewKit(id: number) {
-    this.router.navigate([`/kits/${id}`]);
+  viewKit(article: string) {
+    this.router.navigate([`/kits/${article}`]);
   }
 
-  updateKit(id: number) {
-    this.router.navigate([`/kits/${id}/update`]);
+  updateKit(article: string) {
+    this.router.navigate([`/kits/${article}/update`]);
   }
 
-  removeKit(id: number) {
-    this.kitsService.removeKit(id).subscribe(() => this.fetchKits());
+  removeKit(article: string) {
+    this.kitsService.removeKit(article).subscribe(() => this.fetchKits());
   }
 }

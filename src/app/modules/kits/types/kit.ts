@@ -1,6 +1,6 @@
 export enum KitType {
-  PLASTIC,
-  RESIN
+  PLASTIC = 'PLASTIC',
+  RESIN = 'RESIN'
 }
 
 export enum ScaleType {
@@ -10,7 +10,6 @@ export enum ScaleType {
 }
 
 export interface Kit {
-  id?: number;
   article: string; // input text
   name: string; // input text
   type: KitType; // input radio

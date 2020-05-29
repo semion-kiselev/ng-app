@@ -19,8 +19,8 @@ export class UpdateKitComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.kitIsLoading = true;
-      const id = Number(params.get('id'));
-      this.kitsService.getKitById(id).subscribe({
+      const article = params.get('article');
+      this.kitsService.getKitById(article).subscribe({
         next: (kit: Kit) => this.kit = kit,
         complete: () => this.kitIsLoading = false,
       });
@@ -32,10 +32,6 @@ export class UpdateKitComponent implements OnInit {
   }
 
   onSubmit(kit: Kit) {
-    const kitToUpdate = {
-      id: this.kit.id,
-      ...kit
-    };
-    this.kitsService.updateKit(kitToUpdate).subscribe(() => this.goBack());
+    this.kitsService.updateKit(kit).subscribe(() => this.goBack());
   }
 }

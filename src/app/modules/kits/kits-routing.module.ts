@@ -10,8 +10,8 @@ import {AuthGuardService} from '../../core/guards/auth-guard.service';
 const routes: Routes = [
   { path: '', component: KitsListComponent },
   { path: 'create', component: CreateKitComponent },
-  { path: ':id/update', component: UpdateKitComponent },
-  { path: ':id', component: KitComponent, pathMatch: 'full' },
+  { path: ':article/update', component: UpdateKitComponent },
+  { path: ':article', component: KitComponent, pathMatch: 'full' },
 ];
 
 @NgModule({
